@@ -114,6 +114,7 @@ static void perform_distribution(const char *path)
         fprintf(stderr,
             PROGNAME "(%d): error: could not open file `%s' for reading: %s\n",
             g_rank, path, strerror(errno));
+        MPI_Check(MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE));
         MPI_Check(MPI_Finalize());
         _exit(EXIT_FAILURE);
     }
@@ -260,6 +261,7 @@ int main(int argc, char **argv)
     if (num_sides < 2) {
         fprintf(stderr, PROGNAME "(%d): error: invalid number of sides (%d)\n",
             g_rank, num_sides);
+        MPI_Check(MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE));
         MPI_Check(MPI_Finalize());
         return EXIT_FAILURE;
     }
@@ -271,6 +273,7 @@ int main(int argc, char **argv)
             PROGNAME "(%d): error: no enough slots for toroid topology. Got "
                      "%d when %d processes were expected.\n",
             g_rank, g_size, num_expected_slots);
+        MPI_Check(MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE));
         MPI_Check(MPI_Finalize());
         return EXIT_FAILURE;
     }
